@@ -5,7 +5,7 @@
 ## 機能
 
 - 再生/停止（メニューバーから2クリック）
-- 5局プリセットの切り替え
+- 7局プリセットの切り替え（Lo-fi / Synthwave / Chillstep のジャンル見出し付き）
 - 曲名表示（局がICYメタデータを流している場合）
 - 小音量域を広く取った音量スライダー（3乗カーブ・会議中のささやき音量向け）
 - メディアキー対応（再生中のみ。停止中はNow Playingの座を明け渡し、AirPods接続時の勝手な自動再生を防ぐ）
@@ -40,21 +40,24 @@ cd nagara
 
 ```json
 [
-  {"id": "lautfm-lofi", "name": "laut.fm Lofi", "url": "https://lofi.stream.laut.fm/lofi"}
+  {"id": "my-station", "name": "My Station", "url": "https://example.com/stream.mp3", "genre": "Lo-fi"}
 ]
 ```
 
-注意: URLは**httpsのみ**（httpはmacOSのATSによりブロックされる。アプリ側の検証はなし）。
+- `genre` は省略可。指定すると、連続する同じ `genre` の塊の先頭にメニューの小見出しが付く
+- 注意: URLは**httpsのみ**（httpはmacOSのATSによりブロックされる。アプリ側の検証はなし）
 
-## プリセット5局
+## プリセット7局
 
-| ID | 名前 | URL |
-|---|---|---|
-| lautfm-lofi | laut.fm Lofi | https://lofi.stream.laut.fm/lofi |
-| coderadio | freeCodeCamp Code Radio | https://coderadio-admin-v2.freecodecamp.org/listen/coderadio/radio.mp3 |
-| fluxfm-chillhop | FluxFM ChillHop | https://streams.fluxfm.de/Chillhop/mp3-320/streams.fluxfm.de/ |
-| lautfm-lofi-radio | laut.fm Lofi Radio | https://lofi-radio.stream.laut.fm/lofi-radio |
-| bigfm-lofi-focus | bigFM LoFi Focus | https://stream.bigfm.de/lofifocus/mp3-128/radiobrowser |
+| ジャンル | ID | 名前 | URL |
+|---|---|---|---|
+| Lo-fi | coderadio | freeCodeCamp Code Radio | https://coderadio-admin-v2.freecodecamp.org/listen/coderadio/radio.mp3 |
+| Lo-fi | fluxfm-chillhop | FluxFM ChillHop | https://streams.fluxfm.de/Chillhop/mp3-320/streams.fluxfm.de/ |
+| Lo-fi | bigfm-lofi-focus | bigFM LoFi Focus | https://stream.bigfm.de/lofifocus/mp3-128/radiobrowser |
+| Lo-fi | nia-lofi | NIA Radio Lo-Fi | https://radio.nia.nc/radio/8020/lofi-hq-stream.aac |
+| Synthwave | nightride-chillsynth | Nightride Chillsynth | https://stream.nightride.fm/chillsynth.mp3 |
+| Synthwave | nightride-datawave | Nightride Datawave | https://stream.nightride.fm/datawave.mp3 |
+| Chillstep | 24dubstep-calmflow | 24Dubstep CalmFlow | https://stream.24dubstep.pl/listen/chillstep/mp3_best |
 
 ## 実測値（再生中）
 

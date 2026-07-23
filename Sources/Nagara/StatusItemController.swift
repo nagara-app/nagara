@@ -82,8 +82,13 @@ final class StatusItemController: NSObject, NSMenuDelegate {
             menu.addItem(.separator())
         }
 
-        // チャンネル一覧（選択中にチェックマーク）
+        // チャンネル一覧（選択中にチェックマーク・genreの変わり目に小さな見出し）
+        var currentGenre: String? = nil
         for channel in channels {
+            if let genre = channel.genre, genre != currentGenre {
+                menu.addItem(NSMenuItem.sectionHeader(title: genre))
+            }
+            currentGenre = channel.genre
             let item = NSMenuItem(title: channel.name, action: #selector(selectChannel(_:)), keyEquivalent: "")
             item.target = self
             item.representedObject = channel
