@@ -45,7 +45,9 @@ final class StatusItemController: NSObject, NSMenuDelegate {
     private func updateIcon(for state: PlayerController.State) {
         let name = (state == .playing || state == .connecting) ? "play.circle.fill" : "stop.circle.fill"
         let desc = state == .playing ? "Nagara (再生中)" : "Nagara"
-        statusItem.button?.image = NSImage(systemSymbolName: name, accessibilityDescription: desc)
+        let config = NSImage.SymbolConfiguration(pointSize: 16, weight: .regular)
+        statusItem.button?.image = NSImage(systemSymbolName: name, accessibilityDescription: desc)?
+            .withSymbolConfiguration(config)
     }
 
     @objc private func statusItemClicked() {
