@@ -49,15 +49,15 @@ cd nagara
 
 ## プリセット7局
 
-| ジャンル | ID | 名前 | URL |
-|---|---|---|---|
-| Lo-fi | coderadio | freeCodeCamp Code Radio | https://coderadio-admin-v2.freecodecamp.org/listen/coderadio/radio.mp3 |
-| Lo-fi | fluxfm-chillhop | FluxFM ChillHop | https://streams.fluxfm.de/Chillhop/mp3-320/streams.fluxfm.de/ |
-| Lo-fi | bigfm-lofi-focus | bigFM LoFi Focus | https://stream.bigfm.de/lofifocus/mp3-128/radiobrowser |
-| Lo-fi | nia-lofi | NIA Radio Lo-Fi | https://radio.nia.nc/radio/8020/lofi-hq-stream.aac |
-| Synthwave | nightride-chillsynth | Nightride Chillsynth | https://stream.nightride.fm/chillsynth.mp3 |
-| Synthwave | nightride-datawave | Nightride Datawave | https://stream.nightride.fm/datawave.mp3 |
-| Chillstep | 24dubstep-calmflow | 24Dubstep CalmFlow | https://stream.24dubstep.pl/listen/chillstep/mp3_best |
+| ジャンル | ID | 名前 | ひとこと | URL |
+|---|---|---|---|---|
+| Lo-fi | coderadio | freeCodeCamp Code Radio | 米プログラミング学習非営利の24/7コーディング用BGM | https://coderadio-admin-v2.freecodecamp.org/listen/coderadio/radio.mp3 |
+| Lo-fi | fluxfm-chillhop | FluxFM ChillHop | ベルリンの実局のChillhopチャンネル。320kで外れが少ない | https://streams.fluxfm.de/Chillhop/mp3-320/streams.fluxfm.de/ |
+| Lo-fi | bigfm-lofi-focus | bigFM LoFi Focus | ドイツ大手若者局の集中用チャンネル | https://stream.bigfm.de/lofifocus/mp3-128/radiobrowser |
+| Lo-fi | nia-lofi | NIA Radio Lo-Fi | ニューカレドニアの局。radio-browser人気上位 | https://radio.nia.nc/radio/8020/lofi-hq-stream.aac |
+| Synthwave | nightride-chillsynth | Nightride Chillsynth | 落ち着いたSynthwave（chillsynth）のド定番 | https://stream.nightride.fm/chillsynth.mp3 |
+| Synthwave | nightride-datawave | Nightride Datawave | さらに静か・アンビエント寄り。夜作業向き | https://stream.nightride.fm/datawave.mp3 |
+| Chillstep | 24dubstep-calmflow | 24Dubstep CalmFlow | ポーランドのdubstep専門局の「静か枠」320k | https://stream.24dubstep.pl/listen/chillstep/mp3_best |
 
 ## 実測値（再生中）
 
