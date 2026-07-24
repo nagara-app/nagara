@@ -9,6 +9,8 @@ final class StatusItemController: NSObject, NSMenuDelegate {
     private let menu = NSMenu()
     private let settingsMenu = NSMenu()
     private weak var playButton: NSButton?
+    private var connectingTimer: Timer?
+    private var connectingFrame = 0
 
     init(player: PlayerController, settings: Settings, channels: [Channel]) {
         self.statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -42,10 +44,43 @@ final class StatusItemController: NSObject, NSMenuDelegate {
         }
     }
 
+    deinit {
+        // RunLoopがタイマーを保持し続けるため明示的に破棄する
+        connectingTimer?.invalidate()
+    }
+
     private func updateIcon(for state: PlayerController.State) {
+        connectingTimer?.invalidate()
+        connectingTimer = nil
+        let config = NSImage.SymbolConfiguration(pointSize: 16, weight: .regular)
+
+        // 接続中はドットが順に点灯するローディング表示
+        // （variable colorのフレームをタイマーで循環。NSStatusItemはSymbol Effect非対応のため自前アニメ）
+        if state == .connecting {
+            let frames = [0.0, 0.34, 0.67, 1.0].compactMap {
+                NSImage(systemSymbolName: "ellipsis.circle.fill", variableValue: $0,
+                        accessibilityDescription: "Nagara (接続中)")?
+                    .withSymbolConfiguration(config)
+            }
+            if frames.count == 4 {
+                connectingFrame = 0
+                statusItem.button?.image = frames[0]
+                let timer = Timer(timeInterval: 0.3, repeats: true) { [weak self] _ in
+                    guard let self else { return }
+                    connectingFrame = (connectingFrame + 1) % frames.count
+                    statusItem.button?.image = frames[connectingFrame]
+                }
+                timer.tolerance = 0.05  // 省電力（0.3秒周期なら視覚上の劣化なし）
+                // メニュー表示中(eventTracking)でも止まらないよう.commonで回す
+                RunLoop.main.add(timer, forMode: .common)
+                connectingTimer = timer
+                return
+            }
+            // フレーム生成に失敗した場合は従来どおり静止アイコンにフォールバック
+        }
+
         let name = (state == .playing || state == .connecting) ? "play.circle.fill" : "stop.circle.fill"
         let desc = state == .playing ? "Nagara (再生中)" : "Nagara"
-        let config = NSImage.SymbolConfiguration(pointSize: 16, weight: .regular)
         statusItem.button?.image = NSImage(systemSymbolName: name, accessibilityDescription: desc)?
             .withSymbolConfiguration(config)
     }
