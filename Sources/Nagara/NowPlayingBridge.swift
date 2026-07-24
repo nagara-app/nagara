@@ -2,6 +2,7 @@ import Foundation
 import MediaPlayer
 
 /// メディアキー(▶❚❚)・AirPods操作・コントロールセンター対応。
+/// リモートコマンドは「停止」専用で、再生開始はメニューUIからのみ行う設計。
 /// Spotify等の他アプリと「今の再生中」の座を取り合う点は既知の留意点。
 final class NowPlayingBridge {
     private let player: PlayerController
@@ -10,19 +11,26 @@ final class NowPlayingBridge {
         self.player = player
 
         let center = MPRemoteCommandCenter.shared()
+        // リモートコマンドは「停止」専用にする（再生開始はメニューからのみ）。
+        // isEnabled = false でも mediaremoted はコマンドを配送してくることがあり、
+        // AirPods接続時の自動再開playがここを通ると停止中でも勝手に再生が始まるため、
+        // ハンドラ側でも再生開始経路を持たないことを保証する。
         // メディアキーはメインスレッド配送が保証されないためmainへ寄せる
-        center.playCommand.addTarget { [weak player] _ in
-            DispatchQueue.main.async { player?.togglePlayPause() }
+        let stopIfActive: (MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus = {
+            [weak player] _ in
+            DispatchQueue.main.async {
+                guard let player else { return }
+                if player.state == .playing || player.state == .connecting {
+                    player.stop()
+                }
+            }
             return .success
         }
-        center.pauseCommand.addTarget { [weak player] _ in
-            DispatchQueue.main.async { player?.togglePlayPause() }
-            return .success
-        }
-        center.togglePlayPauseCommand.addTarget { [weak player] _ in
-            DispatchQueue.main.async { player?.togglePlayPause() }
-            return .success
-        }
+        // playは再生開始要求なので常に無視し「実行不可」を返す
+        // （.successを返すとOSが再生成功と見なしAirPodsのルートを掴み続ける恐れがある）
+        center.playCommand.addTarget { _ in .noActionableNowPlayingItem }
+        center.pauseCommand.addTarget(handler: stopIfActive)
+        center.togglePlayPauseCommand.addTarget(handler: stopIfActive)
         // ラジオなので前後スキップは無効化
         center.nextTrackCommand.isEnabled = false
         center.previousTrackCommand.isEnabled = false
@@ -48,7 +56,8 @@ final class NowPlayingBridge {
 
         // 停止中はNow Playingの座から完全に降りる。
         // .pausedのまま座に残ると、AirPods等の接続時にmacOSが自動再開のplayを
-        // 送り込んできて勝手に再生が始まる（再生開始はメニューからのみ行う）。
+        // 送り込んでくる（防衛第1線。isEnabled=falseでも配送され得るため、
+        // ハンドラ側でも再生開始経路を持たない二段構え）。
         guard state == .playing || state == .connecting else {
             infoCenter.nowPlayingInfo = nil
             infoCenter.playbackState = .stopped
